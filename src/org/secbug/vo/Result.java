@@ -2,26 +2,28 @@ package org.secbug.vo;
 
 public class Result {
 
-	private int id;
-	private int jobid;
+	private int featureid;
+	private String program_name;
 	private String recognUrl;
-	private int fingerPrint_id;
-	private String creatime;
+	private String manufacturerName;
+	private String manufacturerUrl;
 
-	public int getId() {
-		return id;
+	private String domainUrl;
+
+	public int getFeatureid() {
+		return featureid;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setFeatureid(int featureid) {
+		this.featureid = featureid;
 	}
 
-	public int getJobid() {
-		return jobid;
+	public String getProgram_name() {
+		return program_name;
 	}
 
-	public void setJobid(int jobid) {
-		this.jobid = jobid;
+	public void setProgram_name(String program_name) {
+		this.program_name = program_name;
 	}
 
 	public String getRecognUrl() {
@@ -32,20 +34,48 @@ public class Result {
 		this.recognUrl = recognUrl;
 	}
 
-	public int getFingerPrint_id() {
-		return fingerPrint_id;
+	public String getManufacturerName() {
+		return manufacturerName;
 	}
 
-	public void setFingerPrint_id(int fingerPrint_id) {
-		this.fingerPrint_id = fingerPrint_id;
+	public void setManufacturerName(String manufacturerName) {
+		this.manufacturerName = manufacturerName;
 	}
 
-	public String getCreatime() {
-		return creatime;
+	public String getManufacturerUrl() {
+		return manufacturerUrl;
 	}
 
-	public void setCreatime(String creatime) {
-		this.creatime = creatime;
+	public void setManufacturerUrl(String manufacturerUrl) {
+		this.manufacturerUrl = manufacturerUrl;
+	}
+
+	public String getDomainUrl() {
+		return domainUrl;
+	}
+
+	public void setDomainUrl(String domainUrl) {
+		this.domainUrl = domainUrl;
+	}
+
+	public Result(String program_name, String recognUrl, String manufacturerUrl) {
+		super();
+		this.program_name = program_name;
+		this.recognUrl = recognUrl;
+		this.manufacturerUrl = manufacturerUrl;
+	}
+
+	public Result(int featureid, String program_name, String recognUrl, String manufacturerUrl, String domainUrl) {
+		super();
+		this.featureid = featureid;
+		this.program_name = program_name;
+		this.recognUrl = recognUrl;
+		this.manufacturerUrl = manufacturerUrl;
+		this.domainUrl = domainUrl;
+	}
+
+	public Result() {
+		super();
 	}
 
 }

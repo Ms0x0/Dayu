@@ -20,34 +20,6 @@ public class ContextUtil {
 	}
 
 	/**
-	 * 数据库驱动注册
-	 */
-	public static void regDriver() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Class.forName("org.postgresql.Driver");
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 获取数据库连接
-	 */
-	public static void getDataSource() {
-		Context.dataBase = new DataBase();
-	}
-
-	/**
-	 * 关闭数据库连接
-	 */
-	public static void closeDataSource() {
-		DataBase.endDS();
-	}
-
-	/**
 	 * 获取程序运行时间
 	 * 
 	 * @return

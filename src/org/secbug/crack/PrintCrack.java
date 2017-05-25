@@ -72,13 +72,13 @@ public class PrintCrack {
 			if (responseCode == 200) {
 				// 从服务器返回一个输入流
 				InputStream inputStream = connection.getInputStream();
-				responseInfo = PrintCrack.getRecognWay(recognid, filetype, inputStream, connection);
+				responseInfo = PrintCrack.getRecognWay(responseCode, recognid, filetype, inputStream, connection);
 			} else if (responseCode == 401) {
 				InputStream inputStream = null;
-				responseInfo = PrintCrack.getRecognWay(recognid, filetype, inputStream, connection);
-			} else if (responseCode == 404 || responseCode == 500 || responseCode == 403 || responseCode == 502) {
+				responseInfo = PrintCrack.getRecognWay(responseCode, recognid, filetype, inputStream, connection);
+			} else if (responseCode == 500 || responseCode == 403 || responseCode == 502) {
 				InputStream inputStream = connection.getErrorStream();
-				responseInfo = PrintCrack.getRecognWay(recognid, filetype, inputStream, connection);
+				responseInfo = PrintCrack.getRecognWay(responseCode, recognid, filetype, inputStream, connection);
 			}
 		} catch (Exception e) {
 			logger.error("当前jobid：" + Context.jobid + "错误信息：" + e.toString());
@@ -134,13 +134,13 @@ public class PrintCrack {
 			if (responseCode == 200) { // 以后这里还要修改
 				// 从服务器返回一个输入流
 				InputStream inputStream = connection.getInputStream();
-				responseInfo = PrintCrack.getRecognWay(recognid, filetype, inputStream, connection);
+				responseInfo = PrintCrack.getRecognWay(responseCode, recognid, filetype, inputStream, connection);
 			} else if (responseCode == 401) {
 				InputStream inputStream = null;
-				responseInfo = PrintCrack.getRecognWay(recognid, filetype, inputStream, connection);
-			} else if (responseCode == 404 || responseCode == 500 || responseCode == 403 || responseCode == 502) {
+				responseInfo = PrintCrack.getRecognWay(responseCode, recognid, filetype, inputStream, connection);
+			} else if (responseCode == 500 || responseCode == 403 || responseCode == 502) {
 				InputStream inputStream = connection.getErrorStream();
-				responseInfo = PrintCrack.getRecognWay(recognid, filetype, inputStream, connection);
+				responseInfo = PrintCrack.getRecognWay(responseCode, recognid, filetype, inputStream, connection);
 			}
 		} catch (Exception e) {
 			logger.error("当前jobid：" + Context.jobid + "错误信息：" + e.toString());
@@ -156,7 +156,7 @@ public class PrintCrack {
 	 * 
 	 * @return
 	 */
-	private static String getRecognWay(int recognid, String filetype, InputStream inputStream,
+	private static String getRecognWay(int responseCode, int recognid, String filetype, InputStream inputStream,
 			HttpURLConnection connection) {
 		String responseInfo = "";
 		if (recognid == 1) { // md5 Hash
@@ -166,7 +166,20 @@ public class PrintCrack {
 		} else if (recognid == 3) { // Response Head
 			responseInfo = PrintCrack.getHeadInfo(connection);
 		} else if (recognid == 4) { // Url Address
+			responseInfo = PrintCrack.getIsUrl(responseCode);
+		}
+		return responseInfo;
+	}
+
+	/**
+	 * 根据响应码去判断是否连接访问可通
+	 */
+	private static String getIsUrl(int responseCode) {
+		String responseInfo = "";
+		if (String.valueOf(responseCode).startsWith("2")) {
 			responseInfo = "true";
+		} else {
+			responseInfo = "false";
 		}
 		return responseInfo;
 	}

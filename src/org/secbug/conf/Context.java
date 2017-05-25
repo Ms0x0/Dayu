@@ -6,25 +6,23 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.secbug.util.ContextUtil;
-import org.secbug.util.DataBase;
-import org.secbug.vo.Fingerprint;
+import org.secbug.vo.Feature;
+import org.secbug.vo.Result;
 
 public class Context {
 
 	public static String[] args;
-	public static DataBase dataBase = null;
 
-	public static String currpath = "D:\\FingerCheck.txt";
+	public static String currpath = "D:\\feature.json";
 	public static List<String> urls = new ArrayList<String>();
 	public static int jobid = 0;
 
-	// public static boolean falg = false;
 	public static int i = 0;
 	public static StringBuffer UrlMatch = new StringBuffer();
 	public static List<String> SUREURLS = new ArrayList<String>(); // 指纹识别成功的url
 
 	public static List<String> urladds = new ArrayList<String>();
-	public static List<Fingerprint> fingerprints = new ArrayList<Fingerprint>();
+	public static List<Feature> features = new ArrayList<Feature>();
 
 	public static int THREADCACHE = 5000; // 线程间隔，每执行1万次对象清除一下系统缓存，调用System.gc();
 	public static int THREADNUM = 50; // 线程数
@@ -35,16 +33,17 @@ public class Context {
 	public static int port = 80; // 端口
 	public static String protocol = "http"; // 协议
 	public static int model = 1; // 识别模式(1。快速模式 2.精准模式 3.人工判断 )
-	public static String outputPath = "";  // 结果输出到文件下
+	public static String outputPath = ""; // 结果输出到文件下
 	public static List<String> fastProbeList = new ArrayList<String>(); // 快速模式（单个域名或ip只出现一次）
 	public static List<String> requestUrl = new ArrayList<String>(); // 自定义
 																		// --设置请求url
 	public static List<String> responseStr = new ArrayList<String>(); // 自定义
 																		// --设置响应内容关键字
 
-	public static List<Integer> resultIds = new ArrayList<Integer>();
-	public static HashMap<Integer, String> resultHashMap = new HashMap<Integer, String>(); // 自定义模式
+	public static HashMap<String, String> resultHashMap = new HashMap<String, String>(); // 自定义模式
 																							// 获取结果
+
+	public static List<Result> results = new ArrayList<Result>(); // 成功识别指纹临时库
 
 	/***
 	 * 更新进度
@@ -55,12 +54,12 @@ public class Context {
 
 	public static synchronized int getTaskCount() {
 		int urlCount = urladds.size();
-		if (fingerprints == null) {
+		if (features == null) {
 			int requestUrlCount = requestUrl.size();
 			int responseStrCount = responseStr.size();
 			return urlCount * requestUrlCount * responseStrCount;
 		} else {
-			int fingerCount = fingerprints.size();
+			int fingerCount = features.size();
 			return urlCount * fingerCount;
 		}
 	}
@@ -87,11 +86,6 @@ public class Context {
 	 */
 	public static void INIT() {
 
-		// 注册数据库驱动
-		ContextUtil.regDriver();
-		// 打开数据库连接
-		ContextUtil.getDataSource();
-
 		// 设置用户变量
 		ContextUtil.setJobOption();
 
@@ -101,11 +95,5 @@ public class Context {
 		// 虚拟机退出时的hook
 		ContextUtil.doShutDownWork();
 
-	}
-
-	public static void END() {
-
-		// 关闭数据库连接
-		ContextUtil.closeDataSource();
 	}
 }

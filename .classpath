@@ -15,5 +15,11 @@
 	<classpathentry kind="lib" path="libs/jsch-0.1.54.jar"/>
 	<classpathentry kind="lib" path="libs/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="libs/postgresql.jar"/>
+	<classpathentry kind="lib" path="libs/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="libs/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="libs/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="libs/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/ezmorph-1.0.4.jar"/>
+	<classpathentry kind="lib" path="libs/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

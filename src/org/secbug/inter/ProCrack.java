@@ -2,7 +2,6 @@ package org.secbug.inter;
 
 import java.util.concurrent.Callable;
 
-import org.apache.log4j.Logger;
 import org.secbug.conf.Context;
 import org.secbug.crack.PrintCrack;
 import org.secbug.model.CheckType;
@@ -10,26 +9,29 @@ import org.secbug.model.ContextCheckType;
 import org.secbug.model.HeadCheckType;
 import org.secbug.model.MD5CheckType;
 import org.secbug.model.UrlCheckType;
-import org.secbug.util.ResultSaveUtil;
+import org.secbug.vo.Result;
 
 public class ProCrack implements Callable<String> {
-
-	private Logger logger = Logger.getLogger(ProCrack.class);
 
 	private String url;
 	private String urlPath;
 	private int recognid;
 	private String recogncontext;
-	private int jobid;
-	private int fingerPrintId;
+	private String program_name;
+	private String manufacturerName;
+	private String manufacturerUrl;
+	private int featureid;
 
-	public ProCrack(String url, String urlPath, int recognid, String recogncontext, int jobid, int fingerPrintId) {
+	public ProCrack(String url, String urlPath, int recognid, String recogncontext, String program_name,
+			String manufacturerName, int featureid, String manufacturerUrl) {
 		this.url = url;
 		this.urlPath = urlPath;
 		this.recognid = recognid;
 		this.recogncontext = recogncontext;
-		this.jobid = jobid;
-		this.fingerPrintId = fingerPrintId;
+		this.program_name = program_name;
+		this.manufacturerName = manufacturerName;
+		this.manufacturerUrl = manufacturerUrl;
+		this.featureid = featureid;
 	}
 
 	public void run() {
@@ -55,14 +57,9 @@ public class ProCrack implements Callable<String> {
 						}
 					}
 					Context.fastProbeList.add(url);
-					int currid = ResultSaveUtil.SaveResult(jobid, fingerPrintId, urlPath);
-					if (currid == -1) {
-						logger.info("当前jobid：" + Context.jobid + " 信息提示：保存结果失败！");
-					} else {
-						logger.info("当前jobid：" + Context.jobid + " 信息提示：保存结果成功！");
-					}
-					Context.resultIds.add(currid);
-					Context.resultHashMap.put(currid, recogncontext);
+					Result result = new Result(program_name, urlPath, manufacturerUrl);
+					Context.results.add(result);
+					Context.resultHashMap.put(urlPath, recogncontext);
 				}
 			}
 		} else if (Context.model == 2) {
@@ -72,13 +69,8 @@ public class ProCrack implements Callable<String> {
 			} else {
 				boolean falg = ProCrack.getRecognType(urlPath, recognid, recogncontext, responseInfo);
 				if (falg) { // 修改成保存结果
-					int currid = ResultSaveUtil.SaveResult(jobid, fingerPrintId, urlPath);
-					if (currid == -1) {
-						logger.info("当前jobid：" + Context.jobid + " 信息提示：保存结果失败！");
-					} else {
-						logger.info("当前jobid：" + Context.jobid + " 信息提示：保存结果成功！");
-					}
-					Context.resultIds.add(currid);
+					Result result = new Result(featureid, program_name, urlPath, manufacturerUrl, url);
+					Context.results.add(result);
 				}
 			}
 		} else if (Context.model == 3) {
@@ -89,13 +81,8 @@ public class ProCrack implements Callable<String> {
 				boolean falg = ProCrack.getRecognType(urlPath, recognid, recogncontext, responseInfo);
 				if (falg) { // 修改成保存结果
 					Context.i++;
-					int currid = ResultSaveUtil.SaveResult(jobid, fingerPrintId, urlPath);
-					if (currid == -1) {
-						logger.info("当前jobid：" + Context.jobid + " 信息提示：保存结果失败！");
-					} else {
-						logger.info("当前jobid：" + Context.jobid + " 信息提示：保存结果成功！");
-					}
-					Context.resultIds.add(currid);
+					Result result = new Result(program_name, urlPath, manufacturerUrl);
+					Context.results.add(result);
 				}
 			}
 		}

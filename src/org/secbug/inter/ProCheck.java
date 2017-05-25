@@ -5,7 +5,6 @@ import java.util.concurrent.Callable;
 
 import org.secbug.conf.Context;
 import org.secbug.util.HttpConnectCheck;
-import org.secbug.util.JobStateUtil;
 
 public class ProCheck extends Thread implements Callable<String>  {
 	
@@ -25,7 +24,6 @@ public class ProCheck extends Thread implements Callable<String>  {
 				System.out.println("URL:" + urlPath + " 访问异常，已删除.");
 			} else {
 				System.out.println("URL:" + urlPath + " 访问异常，已删除.");
-				JobStateUtil.InvalidJobState();
 			}
 		}
 	}

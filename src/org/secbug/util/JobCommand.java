@@ -4,14 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.secbug.conf.Context;
-import org.secbug.dao.JobDAO;
-import org.secbug.dao.impl.JobDAOImpl;
-import org.secbug.vo.Job;
 
 public class JobCommand {
 
@@ -283,18 +277,6 @@ public class JobCommand {
 	 * …Ë÷√job
 	 */
 	private void setJob() {
-		JobDAO dao = new JobDAOImpl();
-		Job job = new Job();
-		String creatime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-		job.setCreatime(creatime);
-		job.setStatus(0); // Œ¥ø™ º
-		job.setOneperent("0.00%");
-		job.setTwoperent("0.00%");
-		int jobid = dao.insertJob(job);
-		if (jobid == -1) {
-			ContextUtil.exitPrintln("New create a job exptions,Please try to again.");
-		} else {
-			Context.jobid = jobid;
-		}
+		Context.jobid = 1;
 	}
 }

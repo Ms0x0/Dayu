@@ -5,15 +5,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.secbug.conf.Context;
-import org.secbug.dao.JobDAO;
-import org.secbug.dao.impl.JobDAOImpl;
 import org.secbug.inter.IntruderCheck;
 import org.secbug.inter.IntruderCrack;
 import org.secbug.inter.ProCheck;
 import org.secbug.inter.ProCrack;
-import org.secbug.util.JobStateUtil;
-import org.secbug.vo.Fingerprint;
-import org.secbug.vo.Job;
+import org.secbug.vo.Feature;
 
 public class RecognManager {
 
@@ -38,9 +34,9 @@ public class RecognManager {
 		IntruderCheck intruderCheck = new IntruderCheck();
 		for (String urlPath : urladds) {
 			++i;
-			ProCheck proCheck = new ProCheck(urlPath,urladds);
+			ProCheck proCheck = new ProCheck(urlPath, urladds);
 			intruderCheck.start(proCheck);
-			if(i == 1000){
+			if (i == 1000) {
 				try {
 					Thread.sleep(Context.THREADCACHE);
 				} catch (InterruptedException e) {
@@ -52,30 +48,27 @@ public class RecognManager {
 		}
 		intruderCheck.clearCache();
 		intruderCheck.shutdown();
-		
+
 		urladds = RecognManager.getUrlProtocol(Context.urls);
 		// 自定义模式
 		if (Context.requestUrl.size() != 0 && Context.requestUrl != null) {
 			state = 2;
-			JobStateUtil.ChangeJobState(state);
-			
+
 			RecognManager.getPercentByJob(null, urladds);
 			RecognManager.start(null, urladds, Context.jobid, state, 1);
 
-			JobStateUtil.EndJobState();
 			falg = true;
 			return falg;
 		}
 		// 常规模式
 		@SuppressWarnings("static-access")
-		List<Fingerprint> fingerprints1 = readCheck.getCheckData();
+		List<Feature> features = readCheck.getCheckData();
 		List<String> urladds1 = RecognManager.getUrlProtocol(Context.urls);
 		state = 3;
-		JobStateUtil.ChangeJobState(state);
-		RecognManager.getPercentByJob(fingerprints1, urladds1);
-		RecognManager.start(fingerprints1, urladds1, Context.jobid, state, 2); // 精准模式
 
-		JobStateUtil.EndJobState();
+		RecognManager.getPercentByJob(features, urladds1);
+		RecognManager.start(features, urladds1, Context.jobid, state, 2); // 精准模式
+
 		falg = true;
 		return falg;
 	}
@@ -83,7 +76,7 @@ public class RecognManager {
 	/**
 	 * 执行 :1.自定义模式 2.常规模式
 	 */
-	private static void start(List<Fingerprint> fingerprints, List<String> urladds, int jobid, int state, int count) {
+	private static void start(List<Feature> features, List<String> urladds, int jobid, int state, int count) {
 		int i = 0;
 		IntruderCrack intruderCrack = new IntruderCrack();
 		if (count == 1) {
@@ -92,7 +85,7 @@ public class RecognManager {
 					for (String reponseStr : Context.responseStr) {
 						++i;
 						String urlPath = url + requestUrl;
-						ProCrack crack = new ProCrack(url, urlPath, 2, reponseStr, jobid, 0);
+						ProCrack crack = new ProCrack(url, urlPath, 2, reponseStr, null, null, 0, null);
 						intruderCrack.start(crack);
 						if (i == Context.THREADCACHE) {
 							try {
@@ -109,12 +102,13 @@ public class RecognManager {
 			intruderCrack.clearCache();
 		} else if (count == 2) {
 			for (String url : urladds) {
-				for (Fingerprint fingerprint : fingerprints) {
+				for (Feature feature : features) {
 					++i;
-					String urlPath = url + fingerprint.getUrl();
+					String urlPath = url + feature.getUrl();
 
-					ProCrack crack = new ProCrack(url, urlPath, fingerprint.getRecognitionType_id(),
-							fingerprint.getRecognition_content(), jobid, fingerprint.getId());
+					ProCrack crack = new ProCrack(url, urlPath, feature.getRecognitionType_id(),
+							feature.getRecognition_content(), feature.getProgram_name(), feature.getManufacturerName(),
+							feature.getId(), feature.getManufacturerUrl());
 					intruderCrack.start(crack);
 					if (i == Context.THREADCACHE) {
 						try {
@@ -152,18 +146,13 @@ public class RecognManager {
 		return urladds;
 	}
 
-	public static void getPercentByJob(List<Fingerprint> fingerprints, List<String> urladds) {
-		Context.fingerprints = fingerprints;
+	public static void getPercentByJob(List<Feature> features, List<String> urladds) {
+		Context.features = features;
 		Context.urladds = urladds;
-		JobDAO dao = new JobDAOImpl();
 		new Thread() {
 			public void run() {
 				while (true) {
 					String res = Context.getPercent();
-					Job job2 = new Job();
-					job2.setId(Context.jobid);
-					job2.setTwoperent(res);
-					dao.updateJobWithTwo(job2);
 					if (res.equals("100.00%")) {
 						break;
 					}
