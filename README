@@ -26,13 +26,4 @@
 		  java -jar Dayu.jar -u cn.wordpress.org -s https -p 443  -m 3
 		  
  Dayu.jar程序说明：
-      Feature.json指纹文件放到D盘根目录(d:\\Feature.json),如无D磁盘，请自行下载源码更改org.secbug.conf下Context.java文件中的currpath常量。
-	  
- 在此说明：	  
-      指纹识别离不开指纹库的强大。希望用户多多在我们平台http://www.secbug.org:8080/提交指纹，我们一起进步。
-	  
-	  ☆☆ 本版本为第二版，第一版基于数据库sql文件，可保存指纹识别结果。如有需要，请联系QQ212125278所取。
-
-	      
-	  
-	  
+      Feature.json指纹文件放到网站根目录。

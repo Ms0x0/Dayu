@@ -13,7 +13,7 @@ public class Context {
 
 	public static String[] args;
 
-	public static String currpath = "D:\\feature.json";
+	public static String currpath = System.getProperty("user.dir") + "\\feature.json";
 	public static List<String> urls = new ArrayList<String>();
 	public static int jobid = 0;
 
