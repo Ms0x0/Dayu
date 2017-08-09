@@ -13,40 +13,40 @@ public class Context {
 
 	public static String[] args;
 
-	public static String currpath = "D:\\feature.json";
+	public static String currpath = System.getProperty("user.dir")+"\\feature.json";
 	public static List<String> urls = new ArrayList<String>();
 	public static int jobid = 0;
 
 	public static int i = 0;
 	public static StringBuffer UrlMatch = new StringBuffer();
-	public static List<String> SUREURLS = new ArrayList<String>(); // Ö¸ÎÆÊ¶±ğ³É¹¦µÄurl
+	public static List<String> SUREURLS = new ArrayList<String>(); // æŒ‡çº¹è¯†åˆ«æˆåŠŸçš„url
 
 	public static List<String> urladds = new ArrayList<String>();
 	public static List<Feature> features = new ArrayList<Feature>();
 
-	public static int THREADCACHE = 5000; // Ïß³Ì¼ä¸ô£¬Ã¿Ö´ĞĞ1Íò´Î¶ÔÏóÇå³ıÒ»ÏÂÏµÍ³»º´æ£¬µ÷ÓÃSystem.gc();
-	public static int THREADNUM = 50; // Ïß³ÌÊı
-	public static int TASKCOUNT = 0; // ×ÜÈÎÎñÊı
-	public static int CURRENTNUM = 0; // ÒÑÍê³ÉÈÎÎñ×ÜÊı
-	public static long STARTTIME = 0; // ÏµÍ³³õÊ¼»¯Ê±¼ä
+	public static int THREADCACHE = 5000; // çº¿ç¨‹é—´éš”ï¼Œæ¯æ‰§è¡Œ1ä¸‡æ¬¡å¯¹è±¡æ¸…é™¤ä¸€ä¸‹ç³»ç»Ÿç¼“å­˜ï¼Œè°ƒç”¨System.gc();
+	public static int THREADNUM = 50; // çº¿ç¨‹æ•°
+	public static int TASKCOUNT = 0; // æ€»ä»»åŠ¡æ•°
+	public static int CURRENTNUM = 0; // å·²å®Œæˆä»»åŠ¡æ€»æ•°
+	public static long STARTTIME = 0; // ç³»ç»Ÿåˆå§‹åŒ–æ—¶é—´
 
-	public static int port = 80; // ¶Ë¿Ú
-	public static String protocol = "http"; // Ğ­Òé
-	public static int model = 1; // Ê¶±ğÄ£Ê½(1¡£¿ìËÙÄ£Ê½ 2.¾«×¼Ä£Ê½ 3.ÈË¹¤ÅĞ¶Ï )
-	public static String outputPath = ""; // ½á¹ûÊä³öµ½ÎÄ¼şÏÂ
-	public static List<String> fastProbeList = new ArrayList<String>(); // ¿ìËÙÄ£Ê½£¨µ¥¸öÓòÃû»òipÖ»³öÏÖÒ»´Î£©
-	public static List<String> requestUrl = new ArrayList<String>(); // ×Ô¶¨Òå
-																		// --ÉèÖÃÇëÇóurl
-	public static List<String> responseStr = new ArrayList<String>(); // ×Ô¶¨Òå
-																		// --ÉèÖÃÏìÓ¦ÄÚÈİ¹Ø¼ü×Ö
+	public static int port = 80; // ç«¯å£
+	public static String protocol = "http"; // åè®®
+	public static int model = 1; // è¯†åˆ«æ¨¡å¼(1ã€‚å¿«é€Ÿæ¨¡å¼ 2.ç²¾å‡†æ¨¡å¼ 3.äººå·¥åˆ¤æ–­ )
+	public static String outputPath = ""; // ç»“æœè¾“å‡ºåˆ°æ–‡ä»¶ä¸‹
+	public static List<String> fastProbeList = new ArrayList<String>(); // å¿«é€Ÿæ¨¡å¼ï¼ˆå•ä¸ªåŸŸåæˆ–ipåªå‡ºç°ä¸€æ¬¡ï¼‰
+	public static List<String> requestUrl = new ArrayList<String>(); // è‡ªå®šä¹‰
+																		// --è®¾ç½®è¯·æ±‚url
+	public static List<String> responseStr = new ArrayList<String>(); // è‡ªå®šä¹‰
+																		// --è®¾ç½®å“åº”å†…å®¹å…³é”®å­—
 
-	public static HashMap<String, String> resultHashMap = new HashMap<String, String>(); // ×Ô¶¨ÒåÄ£Ê½
-																							// »ñÈ¡½á¹û
+	public static HashMap<String, String> resultHashMap = new HashMap<String, String>(); // è‡ªå®šä¹‰æ¨¡å¼
+																							// è·å–ç»“æœ
 
-	public static List<Result> results = new ArrayList<Result>(); // ³É¹¦Ê¶±ğÖ¸ÎÆÁÙÊ±¿â
+	public static List<Result> results = new ArrayList<Result>(); // æˆåŠŸè¯†åˆ«æŒ‡çº¹ä¸´æ—¶åº“
 
 	/***
-	 * ¸üĞÂ½ø¶È
+	 * æ›´æ–°è¿›åº¦
 	 */
 	public static synchronized void updatePercent() {
 		Context.CURRENTNUM++;
@@ -65,7 +65,7 @@ public class Context {
 	}
 
 	/**
-	 * ½ø¶ÈÌõÀà
+	 * è¿›åº¦æ¡ç±»
 	 * 
 	 * @return 100.00%
 	 */
@@ -73,26 +73,26 @@ public class Context {
 		double count = Context.getTaskCount();
 		double curent = Context.CURRENTNUM;
 		System.out.print("count=" + count + " current=" + curent);
-		NumberFormat format = NumberFormat.getPercentInstance();// »ñÈ¡¸ñÊ½»¯ÀàÊµÀı
-		format.setMinimumFractionDigits(2);// ÉèÖÃĞ¡ÊıÎ»
-		String ret = format.format(curent / count);// ´òÓ¡¼ÆËã½á¹û
+		NumberFormat format = NumberFormat.getPercentInstance();// è·å–æ ¼å¼åŒ–ç±»å®ä¾‹
+		format.setMinimumFractionDigits(2);// è®¾ç½®å°æ•°ä½
+		String ret = format.format(curent / count);// æ‰“å°è®¡ç®—ç»“æœ
 		System.out.print(" " + ret + "\r\n");
 		return ret;
 	}
 
 	/**
-	 * ÉèÖÃ³õÊ¼»¯ÉèÖÃ
+	 * è®¾ç½®åˆå§‹åŒ–è®¾ç½®
 	 * 
 	 */
 	public static void INIT() {
 
-		// ÉèÖÃÓÃ»§±äÁ¿
+		// è®¾ç½®ç”¨æˆ·å˜é‡
 		ContextUtil.setJobOption();
 
-		// ³ÌĞò¿ªÊ¼ÔËĞĞÊ±¼ä
+		// ç¨‹åºå¼€å§‹è¿è¡Œæ—¶é—´
 		Context.STARTTIME = System.currentTimeMillis();
 
-		// ĞéÄâ»úÍË³öÊ±µÄhook
+		// è™šæ‹Ÿæœºé€€å‡ºæ—¶çš„hook
 		ContextUtil.doShutDownWork();
 
 	}
